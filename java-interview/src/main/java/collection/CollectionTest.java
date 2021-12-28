@@ -27,10 +27,21 @@ class CollectionTest {
   }
 
   /**
+   * Capitalize the first letter
+   */
+  private static String capitalize(String s){
+    if (s.equals("")) {
+			return s;
+		}
+    return ((s.substring(0, 1).toUpperCase()) + (s.substring(1)));
+  }
+
+  /**
    * operation : abc -> AbcAbc
    */
   public static List<String> compute2(List<String> input) {
-    return null;
+    List<String> output = input.stream().map(x -> capitalize(x) + capitalize(x)).collect(Collectors.toList());
+    return output;
   }
 
 }
