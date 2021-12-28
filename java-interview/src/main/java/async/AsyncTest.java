@@ -23,15 +23,41 @@ class AsyncTest {
   );
 
   public static CompletableFuture<Option<Ceo>> getCeoById(String ceo_id) {
-    return null;
+    CompletableFuture<Option<Ceo>> completableFuture = new CompletableFuture<Option<Ceo>>();
+    for (Ceo ceo : ceos) {
+      if (ceo.id.equals(ceo_id)) {
+        completableFuture.complete(Option.of(ceo));
+        return completableFuture;
+      }
+    }
+    completableFuture.complete(Option.none());
+    return completableFuture;
   }
 
   public static CompletableFuture<Option<Enterprise>> getEnterpriseByCeoId(String ceo_id) {
-    return null;
+    CompletableFuture<Option<Enterprise>> completableFuture = new CompletableFuture<Option<Enterprise>>();
+    for (Enterprise enterprise : enterprises) {
+        if (enterprise.ceo_id.equals(ceo_id)) {
+          completableFuture.complete(Option.of(enterprise));
+          return completableFuture;
+        }  
+    }
+      completableFuture.complete(Option.none());
+      return completableFuture;
   }
 
   public static CompletableFuture<Tuple2<Option<Ceo>, Option<Enterprise>>> getCEOAndEnterprise(String ceo_id) {
-    return null;
+    CompletableFuture<Tuple2<Option<Ceo>, Option<Enterprise>>> completableFuture = new CompletableFuture<Tuple2<Option<Ceo>, Option<Enterprise>>>();
+    try {
+      Option<Ceo> ceo = getCeoById(ceo_id).get();
+      Option<Enterprise> entreprise = getEnterpriseByCeoId(ceo_id).get();
+      Tuple2<Option<Ceo>, Option<Enterprise>> ceoAndEntreprise = Tuple.of(ceo, entreprise);
+      completableFuture.complete(ceoAndEntreprise);
+      return completableFuture;
+    } catch (Exception e) {
+        completableFuture.complete(Tuple.of(Option.none(), Option.none()));
+        return completableFuture;
+    }
   }
 
 }
